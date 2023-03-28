@@ -8,6 +8,8 @@ const wait        = require('./utilsWait.js')
 
 var db = new database()   // Database example: await db.query("SELECT * FROM test")
 var ws = new webSockets()
+const fps = 60
+const ballSpeed=200
 
 // Start HTTP server
 const app = express()
@@ -104,4 +106,68 @@ async function getPostDades (req, res) {
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify(result))
+}
+app.post("funcionPelotaDir",funcionPelotaDir)
+async function funcionPelotaDir(req,res){
+  let receivedPOST = await post.getPostObject(req)
+  let result = {}
+  var ballNextX
+  var ballNextY
+  receivedPOST.positionX;
+  receivedPOST.positionY;
+  if(receivedPOST.positionY>=445&&receivedPOST.direction=="upLeft"){
+    ballNextX = ballX - ballSpeed / fps;
+    ballNextY = ballY - ballSpeed / fps;
+    result = {status: "OK", result: "downLeft",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.positionY>=445&&receivedPOST.direction=="upRight"){
+    ballNextX = ballX + ballSpeed / fps;
+    ballNextY = ballY - ballSpeed / fps;
+    result = {status: "OK", result: "downRight",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.positionY<=5&&receivedPOST.direction=="downRight"){
+    ballNextX = ballX + ballSpeed / fps;
+    ballNextY = ballY + ballSpeed / fps;
+    result = {status: "OK", result: "upRight",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.positionY<=5&&receivedPOST.direction=="downLeft"){
+    ballNextX = ballX - ballSpeed / fps;
+    ballNextY = ballY + ballSpeed / fps;
+    result = {status: "OK", result: "upLeft",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.positionX<=0){
+    result = {status: "OK", result: "goal2"}
+  }
+  else if(receivedPOST.positionX>=450){
+    result = {status: "OK", result: "goal1"}
+  }
+  webSockets.broadcast(result)
+}
+app.post("funcionPelotaJugador",funcionPelotaJugador)
+async function funcionPelotaJugador(req,res){
+  let receivedPOST = await post.getPostObject(req)
+  let result = {}
+  var ballNextX
+  var ballNextY
+  if(receivedPOST.direction=="upLeft"){
+    ballNextX = ballX + ballSpeed / fps;
+    ballNextY = ballY + ballSpeed / fps;
+    result = {status: "OK", result: "upRight",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.direction=="upRight"){
+    ballNextX = ballX - ballSpeed / fps;
+    ballNextY = ballY + ballSpeed / fps;
+    result = {status: "OK", result: "upLeft",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.direction=="downRight"){
+    ballNextX = ballX - ballSpeed / fps;
+    ballNextY = ballY - ballSpeed / fps;
+    result = {status: "OK", result: "downLeft",ballX:ballNextX,ballY:ballNextY}
+  }
+  else if(receivedPOST.direction=="downLeft"){
+    ballNextX = ballX + ballSpeed / fps;
+    ballNextY = ballY - ballSpeed / fps;
+    result = {status: "OK", result:"downRight",ballX:ballNextX,ballY:ballNextY}
+  }
+  webSockets.broadcast(result)
 }
