@@ -129,11 +129,11 @@ async function funcionPelotaDir(req,res){
         case "downLeft":
           ballDirection = "downRight";
         break;
-        }
-          ballX = intersectionLeft[0] + 1;
-          ballY = intersectionLeft[1];
-        } else if (intersectionRight !== null) {
-          switch (ballDirection) {
+      }
+      ballX = intersectionLeft[0] + 1;
+      ballY = intersectionLeft[1];
+    } else if (intersectionRight !== null) {
+        switch (ballDirection) {
           case "upRight":
             ballDirection = "upLeft";
           break;
@@ -144,17 +144,17 @@ async function funcionPelotaDir(req,res){
       ballX = intersectionRight[0] - 1;
       ballY = intersectionRight[1];
     } else if (intersectionTop !== null) {
-      switch (ballDirection) {
-      case "upRight":
-        ballDirection = "downRight";
-      break;
-      case "upLeft":
-        ballDirection = "downLeft";
-      break;
-      }
-        ballX = intersectionTop[0];
-        ballY = intersectionTop[1] + 1;
-      } else if (intersectionBot !== null) {
+        switch (ballDirection) {
+          case "upRight":
+            ballDirection = "downRight";
+          break;
+          case "upLeft":
+            ballDirection = "downLeft";
+          break;
+          }
+      ballX = intersectionTop[0];
+      ballY = intersectionTop[1] + 1;
+    } else if (intersectionBot !== null) {
       switch (ballDirection) {
         case "downRight":
           ballDirection = "upRight";
@@ -165,17 +165,37 @@ async function funcionPelotaDir(req,res){
       }
       ballX = intersectionBot[0];
       ballY = intersectionBot[1] - 1;
+    } else {
+      if (ballNextY > boardHeight) {
+        if (intersectionLeft !== null) {
+          pointsP2+=1;
+          if (pointsP2==5) {
+            gameStatus = "gameOver";
+            result = {status: "OK", result: gameStatus}
+            ws.broadcast(result)
+          }
+          result = {status: "OK", result: pointsP2}
+          ws.broadcast(result)
+        } else if (intersectionRight !== null) {
+          pointsP1+=1;
+          if (pointsP1==5) {
+            gameStatus = "gameOver";
+            result = {status: "OK", result: gameStatus}
+            ws.broadcast(result)
+          }
+          result = {status: "OK", result: pointsP1}
+          ws.broadcast(result)
+        }
+        
       } else {
-        if (ballNextY > boardHeight) {
-          gameStatus = "gameOver";
-        } else {
-          ballX = ballNextX;
-          ballY = ballNextY;
-      }
+        ballX = ballNextX;
+        ballY = ballNextY;
     }
+  }
     result = {status: "OK", result: ballDirection,ballX:ballX,ballY:ballY}
     ws.broadcast(result)
 }
+
 app.post("funcionPelotaJugador",funcionPelotaJugador)
 async function funcionPelotaJugador(req,res){
   if(jugadors==2){
