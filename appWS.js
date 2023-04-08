@@ -256,14 +256,14 @@ class Obj {
 
             if (intersectionPlayer1 !== null) {
                 switch (ballDirection) {
-                    case "downRight":
-                    ballDirection = "downLeft";
+                    case "downLeft":
+                    ballDirection = "downRight";
                     break;
-                    case "upRight": 
-                    ballDirection = "upLeft";
+                    case "upLeft": 
+                    ballDirection = "upRight";
                     break;
                 }
-            ballX = intersectionPlayer1[0] - 1; // cambiar si el jugador es el de la izquierda a + 1
+            ballX = intersectionPlayer1[0] + 1; // cambiar si el jugador es el de la izquierda a + 1
             ballY = intersectionPlayer1[1];
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
@@ -274,15 +274,15 @@ class Obj {
 
             if (intersectionPlayer2 !== null) {
             switch (ballDirection) {
-                case "downLeft":
-                ballDirection = "downRight";
+                case "downRight":
+                ballDirection = "downLeft";
                 break;
-                case "upLeft": 
-                ballDirection = "upRight";
+                case "upRight": 
+                ballDirection = "upLeft";
                 break;
             }
 
-            ballX = intersectionPlayer2[0] + 1; // cambiar si el jugador es el de la izquierda a + 1
+            ballX = intersectionPlayer2[0] - 1; // cambiar si el jugador es el de la izquierda a + 1
             ballY = intersectionPlayer2[1];
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
