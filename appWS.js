@@ -252,7 +252,7 @@ class Obj {
                 ballY = ballNextY;
             }
             }
-            let linePlayer1 = [[player1X, messageAsObject.player1Y + playerHalf], [player1X, messageAsObject.player1Y - playerHalf]];
+            const linePlayer1 = [[player1X, player1Y - playerHalf], [player1X, player1Y + playerHalf]];
             let intersectionPlayer1 = findIntersection(lineBall, linePlayer1);
 
             if (intersectionPlayer1 !== null) {
@@ -270,7 +270,7 @@ class Obj {
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
 
-            let linePlayer2 = [[player2X, messageAsObject.player2Y - playerHalf], [player2X, messageAsObject.player2Y + playerHalf]];
+            const linePlayer2 = [[player2X, player2Y + playerHalf], [player2X, player2Y - playerHalf]];
             let intersectionPlayer2 = findIntersection(lineBall, linePlayer2);
 
             if (intersectionPlayer2 !== null) {
