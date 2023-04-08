@@ -143,6 +143,7 @@ class Obj {
         }
         else if(messageAsObject.type == "ballDirection"){
             let result = {}
+            if(jugadors==2){
             var ballNextX = ballX;
             var ballNextY = ballY;
             switch (ballDirection) {
@@ -287,7 +288,7 @@ class Obj {
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
-            
+        }
             result = {status: "Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState}
             this.broadcast(result)
         }
