@@ -58,7 +58,7 @@ class Obj {
             jugadors=jugadors+1;
             const id = uuidv4()
             const color = Math.floor(Math.random() * 360)
-            const metadata = { id, color }
+            const metadata = { id, color,jugadors }
             this.socketsClients.set(ws, metadata)
 
             // Send clients list to everyone
@@ -294,7 +294,7 @@ class Obj {
         else if(messageAsObject.type=="playerDirection"){
             let result = {}
             playerDirection=messageAsObject.direction;
-            result = {status: "Direction", playerDirection:playerDirection}
+            result = {status: "Direction", playerDirection:playerDirection,player:messageAsObject.player}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="movePlayer"){
