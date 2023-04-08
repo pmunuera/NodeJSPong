@@ -295,23 +295,26 @@ class Obj {
         else if(messageAsObject.type=="playerDirection"){
             let result = {}
             playerDirection=messageAsObject.direction;
+            console.log(messageAsObject.player);
             result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="movePlayer"){
             let result = {}
-            switch (messageAsObject.playerDirection) {
+            switch (messageAsObject.player1Direction) {
                 case "up":
-                    player1Y = messageAsObject.player1Y - playerSpeed / fps;
-                    player2Y = messageAsObject.player2Y - playerSpeed / fps;
+                    player1Y = player1Y - playerSpeed / fps;
                     break;
                 case "down":
-                    player1Y = messageAsObject.player1Y + playerSpeed / fps;
-                    player2Y = messageAsObject.player2Y + playerSpeed / fps;
+                    player1Y = player1Y + playerSpeed / fps;
                     break;
-                case "none":
-                    player1Y = messageAsObject.player1Y;
-                    player2Y = messageAsObject.player2Y;
+            }
+            switch (messageAsObject.player2Direction) {
+                case "up":
+                    player2Y = player2Y - playerSpeed / fps;
+                    break;
+                case "down":
+                    player2Y = player2Y + playerSpeed / fps;
                     break;
             }
             const playerMinY = 5 + borderSize + playerHalf;
