@@ -289,7 +289,7 @@ class Obj {
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
         }
-            result = {status: "Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState}
+            result = {status: "Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="playerDirection"){
