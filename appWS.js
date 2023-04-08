@@ -27,7 +27,7 @@ let player2Y = 200;
 const playerWidth = 5;
 const playerHeight = 100;
 const playerHalf = playerHeight / 2;
-let playerSpeed = 250;
+let playerSpeed = 500;
 const playerSpeedIncrement = 15
 var playerDirection = "none";
 class Obj {
