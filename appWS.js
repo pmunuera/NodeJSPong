@@ -176,6 +176,10 @@ class Obj {
                 ballSpeed=200
                 playerSpeed=250
                 ballDirection = "upLeft";
+                pointsP2+=1;
+                if (pointsP2==5) {
+                    gameStatus = "gameOver";
+                }
             /*switch (ballDirection) {
                 case "upLeft":
                 ballDirection = "upRight";
@@ -186,12 +190,16 @@ class Obj {
                 }
                 ballX = intersectionLeft[0] + 1;
                 ballY = intersectionLeft[1];*/
-                } else if (intersectionRight !== null) {
+            } else if (intersectionRight !== null) {
                     ballX = 393
                     ballY = 281
                     ballSpeed=200
                     playerSpeed=250
                     ballDirection = "upRight";
+                    pointsP1+=1;
+                    if (pointsP1==5) {
+                        gameStatus = "gameOver";
+                    }
                 /*switch (ballDirection) {
                 case "upRight":
                     ballDirection = "upLeft";
@@ -262,12 +270,14 @@ class Obj {
                 ballDirection = "upRight";
                 break;
             }
+
             ballX = intersectionPlayer2[0] + 1; // cambiar si el jugador es el de la izquierda a + 1
             ballY = intersectionPlayer2[1];
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
 
+            result = {status: "Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,points1:points1,points2:points2,gameState:gameState}
             
             result = {status: "Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,points1:points1,points2:points2,gameState:gameState}
             this.broadcast(result)
@@ -311,6 +321,7 @@ class Obj {
             result = {status: "MovePlayer", player1Y:player1Y,player2Y:player2Y}
             this.broadcast(result)
         }
+
         function findIntersection(lineA, lineB) {
             let result = [0, 0];
             const aX0 = lineA[0][0];
@@ -379,4 +390,3 @@ class Obj {
 }
 
 module.exports = Obj
-
