@@ -92,7 +92,7 @@ class Obj {
         this.wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 var id = this.socketsClients.get(client).id
-                var messageAsString = JSON.stringify({ type: "clients", id: id, list: clients })
+                var messageAsString = JSON.stringify({ status:"Clients",type: "clients", id: id, list: clients })
                 client.send(messageAsString)
             }
         })
@@ -289,13 +289,13 @@ class Obj {
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
         }
-            result = {status: "Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
+            result = {status: "Ball",type:"Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="playerDirection"){
             let result = {}
             playerDirection=messageAsObject.direction;
-            result = {status: "Direction", playerDirection:playerDirection,player:messageAsObject.player}
+            result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="movePlayer"){
