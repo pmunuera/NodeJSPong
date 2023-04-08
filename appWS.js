@@ -27,7 +27,7 @@ let player2Y = 200;
 const playerWidth = 5;
 const playerHeight = 100;
 const playerHalf = playerHeight / 2;
-let playerSpeed = 500;
+let playerSpeed = 1000;
 const playerSpeedIncrement = 15
 var playerDirection = "none";
 class Obj {
@@ -252,7 +252,7 @@ class Obj {
                 ballY = ballNextY;
             }
             }
-            const linePlayer1 = [[player1X, player1Y - playerHalf], [player1X, player1Y + playerHalf]];
+            let linePlayer1 = [[player1X, player1Y - playerHalf], [player1X, player1Y + playerHalf]];
             let intersectionPlayer1 = findIntersection(lineBall, linePlayer1);
 
             if (intersectionPlayer1 !== null) {
@@ -270,7 +270,7 @@ class Obj {
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
 
-            const linePlayer2 = [[player2X, player2Y + playerHalf], [player2X, player2Y - playerHalf]];
+            let linePlayer2 = [[player2X, player2Y + playerHalf], [player2X, player2Y - playerHalf]];
             let intersectionPlayer2 = findIntersection(lineBall, linePlayer2);
 
             if (intersectionPlayer2 !== null) {
