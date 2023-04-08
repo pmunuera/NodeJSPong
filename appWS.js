@@ -52,6 +52,7 @@ class Obj {
 
     // A websocket client connects
     newConnection (ws) {
+        if(jugadors<2){
             console.log("Client connected")
             // Add client to the clients list
             jugadors=jugadors+1;
@@ -79,6 +80,7 @@ class Obj {
 
             // What to do when a client message is received
             ws.on('message', (bufferedMessage) => { this.newMessage(ws, id, bufferedMessage)})
+        }
     }
 
     // Send clientsIds to everyone connected with websockets
