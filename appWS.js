@@ -173,9 +173,9 @@ class Obj {
                 ballSpeed=200
                 playerSpeed=250
                 ballDirection = "upLeft";
-                pointsP2+=1;
-                if (pointsP2==5) {
-                    gameStatus = "gameOver";
+                points2+=1;
+                if (points2==5) {
+                    gameState = "gameOver";
                 }
             /*switch (ballDirection) {
                 case "upLeft":
@@ -193,9 +193,9 @@ class Obj {
                     ballSpeed=200
                     playerSpeed=250
                     ballDirection = "upRight";
-                    pointsP1+=1;
-                    if (pointsP1==5) {
-                        gameStatus = "gameOver";
+                    points1+=1;
+                    if (points1==5) {
+                        gameState = "gameOver";
                     }
                 /*switch (ballDirection) {
                 case "upRight":
