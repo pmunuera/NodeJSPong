@@ -67,14 +67,14 @@ class Obj {
             ws.on("close", () => { 
                 this.socketsClients.delete(ws) 
                 jugadors=jugadors-1
-                var gameState="playing"
-                var jugadors=0;
-                var points1=0;
-                var points2=0;
-                let player1X = 700;
-                let player1Y = 200;
-                let player2X = 50;
-                let player2Y = 200;
+                gameState="playing"
+                jugadors=0;
+                points1=0;
+                points2=0;
+                player1X = 700;
+                player1Y = 200;
+                player2X = 50;
+                player2Y = 200;
             })
 
             // What to do when a client message is received
