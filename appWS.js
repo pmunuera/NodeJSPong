@@ -20,9 +20,9 @@ let ballDirection = "upRight"
 const borderSize = 5
 const boardWidth=786
 const boardHeight=562
-let player1X = 700;
+let player1X = 50;
 let player1Y = 200;
-let player2X = 50;
+let player2X = 700;
 let player2Y = 200;
 const playerWidth = 5;
 const playerHeight = 100;
@@ -72,9 +72,9 @@ class Obj {
                 jugadors=0;
                 points1=0;
                 points2=0;
-                player1X = 700;
+                player1X = 50;
                 player1Y = 200;
-                player2X = 50;
+                player2X = 700;
                 player2Y = 200;
             })
 
@@ -264,7 +264,7 @@ class Obj {
                     ballDirection = "upRight";
                     break;
                 }
-            ballX = intersectionPlayer1[0] - 1; // cambiar si el jugador es el de la izquierda a + 1
+            ballX = intersectionPlayer1[0] + 1; // cambiar si el jugador es el de la izquierda a + 1
             ballY = intersectionPlayer1[1];
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
