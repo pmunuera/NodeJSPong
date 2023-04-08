@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const { log } = require('forever');
 var player1;
 var player2;
+var gameStatus="playing"
 var jugadors=0;
 var points1=0;
 var points2=0;
