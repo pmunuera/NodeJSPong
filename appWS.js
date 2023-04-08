@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const { log } = require('forever');
 var player1;
 var player2;
-var gameStatus="playing"
+var gameState="playing"
 var jugadors=0;
 var points1=0;
 var points2=0;
@@ -53,7 +53,6 @@ class Obj {
     // A websocket client connects
     newConnection (ws) {
             console.log("Client connected")
-            jugadors=jugadors+1
             // Add client to the clients list
             const id = uuidv4()
             const color = Math.floor(Math.random() * 360)
@@ -64,8 +63,7 @@ class Obj {
             this.sendClients()
 
             // What to do when a client is disconnected
-            ws.on("close", () => { this.socketsClients.delete(ws) 
-                jugadors=jugadors-1  })
+            ws.on("close", () => { this.socketsClients.delete(ws) })
 
             // What to do when a client message is received
             ws.on('message', (bufferedMessage) => { this.newMessage(ws, id, bufferedMessage)})
