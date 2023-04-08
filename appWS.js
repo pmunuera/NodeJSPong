@@ -143,9 +143,9 @@ class Obj {
         }
         else if(messageAsObject.type == "ballDirection"){
             let result = {}
-            if(jugadors==2){
             var ballNextX = ballX;
             var ballNextY = ballY;
+            if(jugadors==2){
             switch (ballDirection) {
             case "upRight":
                 ballNextX = ballX + ballSpeed / fps;
