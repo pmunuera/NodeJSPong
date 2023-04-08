@@ -9,7 +9,7 @@ var gameState="playing"
 var jugadors=0;
 var points1=0;
 var points2=0;
-const fps = 120
+const fps = 60
 let ballSpeed=200
 const ballSpeedIncrement = 25
 let ballX = 393
@@ -331,7 +331,7 @@ class Obj {
             } else if (player2Y > playerMaxY) {
                 player2Y = playerMaxY;
             }
-            result = {status: "MovePlayer", player1Y:player1Y,player2Y:player2Y}
+            result = {status: "MovePlayer",type:"MovePlayer", player1Y:player1Y,player2Y:player2Y}
             this.broadcast(result)
         }
 
