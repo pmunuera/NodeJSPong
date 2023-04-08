@@ -283,7 +283,7 @@ class Obj {
                 break;
             }
 
-            ballX = intersectionPlayer2[0] + 1; // cambiar si el jugador es el de la izquierda a + 1
+            ballX = intersectionPlayer2[0] - 1; // cambiar si el jugador es el de la izquierda a + 1
             ballY = intersectionPlayer2[1];
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
