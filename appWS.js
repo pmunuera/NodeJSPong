@@ -63,7 +63,7 @@ class Obj {
             
             // Send clients list to everyone
             this.sendClients()
-            let numeroAleatorio = Math.floor(Math.random()*4+1);
+            let numeroAleatorio = Math.floor(Math.random()*(4-1+min));
             switch(numeroAleatorio){
                 case 1: ballDirection = "upRight";
                 case 2: ballDirection = "upLeft";
@@ -201,19 +201,7 @@ class Obj {
                 points2+=1;
                 if (points2==5) {
                     gameState = "gameOver";
-                    points1=0;
-                    points2=0;
                 }
-            /*switch (ballDirection) {
-                case "upLeft":
-                ballDirection = "upRight";
-                break;
-                case "downLeft":
-                ballDirection = "downRight";
-                break;
-                }
-                ballX = intersectionLeft[0] + 1;
-                ballY = intersectionLeft[1];*/
             } else if (intersectionRight !== null) {
                     ballX = 393
                     ballY = 281
@@ -223,20 +211,8 @@ class Obj {
                     points1+=1;
                     if (points1==5) {
                         gameState = "gameOver";
-                        points1=0;
-                        points2=0;
 
                     }
-                /*switch (ballDirection) {
-                case "upRight":
-                    ballDirection = "upLeft";
-                break;
-                case "downRight":
-                    ballDirection = "downLeft";
-                break;
-            }
-            ballX = intersectionRight[0] - 1;
-            ballY = intersectionRight[1];*/
             } else if (intersectionTop !== null) {
             switch (ballDirection) {
             case "upRight":
