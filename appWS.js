@@ -63,13 +63,11 @@ class Obj {
             
             // Send clients list to everyone
             this.sendClients()
-            let numeroAleatorio = Math.floor(Math.random()*(4-1));
-            switch(numeroAleatorio){
-                case 1: ballDirection = "upRight";
-                case 2: ballDirection = "upLeft";
-                case 3: ballDirection = "downRight";
-                case 4: ballDirection = "downLeft";
-            }
+            let numeroAleatorio = Math.round(Math.random()*4);
+            if(numeroAleatorio==1) ballDirection = "upRight";
+            if(numeroAleatorio==2) ballDirection = "upLeft";
+            if(numeroAleatorio==3) ballDirection = "downRight";
+            if(numeroAleatorio==4) ballDirection = "downLeft";
             console.log(numeroAleatorio);
             console.log(ballDirection)
             // What to do when a client is disconnected
