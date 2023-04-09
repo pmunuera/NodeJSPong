@@ -63,7 +63,7 @@ class Obj {
             
             // Send clients list to everyone
             this.sendClients()
-            let numeroAleatorio = Math.floor(Math.random()*(4-1+min));
+            let numeroAleatorio = Math.floor(Math.random()*(4-1));
             switch(numeroAleatorio){
                 case 1: ballDirection = "upRight";
                 case 2: ballDirection = "upLeft";
