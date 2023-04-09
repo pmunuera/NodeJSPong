@@ -120,7 +120,7 @@ class Obj {
     }
 
     // A message is received from a websocket client
-    newMessage (ws, id, bufferedMessage) {
+    async newMessage (ws, id, bufferedMessage) {
         var messageAsString = bufferedMessage.toString()
         var messageAsObject = {}
             
@@ -143,6 +143,15 @@ class Obj {
         }
         else if(messageAsObject.type == "ballDirection"){
             let result = {}
+            if(jugadors==1){
+                let numeroAleatorio = (Math.random()*4+1);
+                switch(numeroAleatorio){
+                    case 1: ballDirection = "upRight";
+                    case 2: ballDirection = "upLeft";
+                    case 3: ballDirection = "downRight";
+                    case 4: ballDirection = "downLeft";
+                }
+            }
             var ballNextX = ballX;
             var ballNextY = ballY;
             if(jugadors==2){
