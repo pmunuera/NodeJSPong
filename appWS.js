@@ -80,6 +80,8 @@ class Obj {
                 this.socketsClients.forEach((value, key) => {
                     this.socketsClients.delete(value)
                 })
+                let result = {status: "Disconnect",type:"Disconnect"}
+                this.broadcast(result)
                 gameState="waiting"
                 jugadors=jugadors-1
                 jugadors=0;
