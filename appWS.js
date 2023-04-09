@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const { log } = require('forever');
 var player1;
 var player2;
-var gameState="playing"
+var gameState="waiting"
 var jugadors=0;
 var points1=0;
 var points2=0;
@@ -154,6 +154,7 @@ class Obj {
             var ballNextX = ballX;
             var ballNextY = ballY;
             if(jugadors==2){
+                gameState=playing
             switch (ballDirection) {
             case "upRight":
                 ballNextX = ballX + ballSpeed / fps;
