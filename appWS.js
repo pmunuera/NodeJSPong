@@ -70,6 +70,9 @@ class Obj {
             if(numeroAleatorio==4) ballDirection = "downLeft";
             console.log(numeroAleatorio);
             console.log(ballDirection)
+            if(jugadors==2){
+                gameState="syncing"
+            }
             // What to do when a client is disconnected
             ws.on("close", () => { 
                 this.socketsClients.delete(ws) 
@@ -153,6 +156,11 @@ class Obj {
             let result = {}
             var ballNextX = ballX;
             var ballNextY = ballY;
+            if(gameState=="syncing"){
+                result = {status: "Ball",type:"Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
+                this.broadcast(result)
+                await utilsWait(3000)
+            }
             if(jugadors==2){
                 gameState="playing"
             switch (ballDirection) {
