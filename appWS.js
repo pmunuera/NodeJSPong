@@ -201,8 +201,8 @@ class Obj {
                 points2+=1;
                 if (points2==5) {
                     gameState = "gameOver";
-                    var points1=0;
-                    var points2=0;
+                    points1=0;
+                    points2=0;
                 }
             /*switch (ballDirection) {
                 case "upLeft":
@@ -223,8 +223,8 @@ class Obj {
                     points1+=1;
                     if (points1==5) {
                         gameState = "gameOver";
-                        var points1=0;
-                        var points2=0;
+                        points1=0;
+                        points2=0;
 
                     }
                 /*switch (ballDirection) {
