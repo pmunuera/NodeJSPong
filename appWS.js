@@ -3,6 +3,7 @@
 const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid');
 const { log } = require('forever');
+const wait = require('./utilsWait.js')
 var player1;
 var player2;
 var gameState="waiting"
@@ -160,7 +161,7 @@ class Obj {
                 result = {status: "Ball",type:"Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
                 this.broadcast(result)
                 console.log("Syncing: "+gameState);
-                await utilsWait(3000)
+                await wait(3000)
             }
             if(jugadors==2){
                 gameState="playing"
