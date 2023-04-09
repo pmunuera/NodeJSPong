@@ -154,7 +154,7 @@ class Obj {
             var ballNextX = ballX;
             var ballNextY = ballY;
             if(jugadors==2){
-                gameState=playing
+                gameState="playing"
             switch (ballDirection) {
             case "upRight":
                 ballNextX = ballX + ballSpeed / fps;
