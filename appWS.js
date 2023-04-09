@@ -76,8 +76,8 @@ class Obj {
             // What to do when a client is disconnected
             ws.on("close", () => { 
                 this.socketsClients.delete(ws) 
-                jugadors=jugadors-1
                 gameState="playing"
+                jugadors=jugadors-1
                 jugadors=0;
                 points1=0;
                 points2=0;
