@@ -159,10 +159,12 @@ class Obj {
             if(gameState=="syncing"){
                 result = {status: "Ball",type:"Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
                 this.broadcast(result)
+                console.log("Syncing: "+gameState);
                 await utilsWait(3000)
             }
             if(jugadors==2){
                 gameState="playing"
+                console.log("Playing: "+gameState);
             switch (ballDirection) {
             case "upRight":
                 ballNextX = ballX + ballSpeed / fps;
