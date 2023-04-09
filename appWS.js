@@ -31,6 +31,7 @@ const playerHalf = playerHeight / 2;
 let playerSpeed = 1000;
 const playerSpeedIncrement = 15
 var playerDirection = "none";
+let result = {}
 class Obj {
 
     init (httpServer, port, db) {
@@ -80,7 +81,7 @@ class Obj {
                 this.socketsClients.forEach((value, key) => {
                     this.socketsClients.delete(value)
                 })
-                let result = {status: "Disconnect",type:"Disconnect"}
+                result = {status: "Disconnect",type:"Disconnect"}
                 this.broadcast(result)
                 gameState="waiting"
                 jugadors=jugadors-1
@@ -159,7 +160,6 @@ class Obj {
             this.private(rst)
         }
         else if(messageAsObject.type == "ballDirection"){
-            let result = {}
             var ballNextX = ballX;
             var ballNextY = ballY;
             if(gameState=="syncing"){
@@ -297,14 +297,12 @@ class Obj {
             this.broadcast(result)
         }
         else if(messageAsObject.type=="playerDirection"){
-            let result = {}
             playerDirection=messageAsObject.direction;
             console.log(messageAsObject.player);
             result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="movePlayer"){
-            let result = {}
             switch (messageAsObject.player1Direction) {
                 case "up":
                     player1Y = player1Y - playerSpeed / fps;
