@@ -60,16 +60,18 @@ class Obj {
             const color = Math.floor(Math.random() * 360)
             const metadata = { id, color,jugadors }
             this.socketsClients.set(ws, metadata)
-            let numeroAleatorio = (Math.random()*4+1);
-                switch(numeroAleatorio){
-                    case 1: ballDirection = "upRight";
-                    case 2: ballDirection = "upLeft";
-                    case 3: ballDirection = "downRight";
-                    case 4: ballDirection = "downLeft";
-                }
+            
             // Send clients list to everyone
             this.sendClients()
-
+            let numeroAleatorio = (Math.random()*4+1);
+            switch(numeroAleatorio){
+                case 1: ballDirection = "upRight";
+                case 2: ballDirection = "upLeft";
+                case 3: ballDirection = "downRight";
+                case 4: ballDirection = "downLeft";
+            }
+            console.log(numeroAleatorio);
+            console.log(ballDirection)
             // What to do when a client is disconnected
             ws.on("close", () => { 
                 this.socketsClients.delete(ws) 
@@ -82,6 +84,8 @@ class Obj {
                 player1Y = 200;
                 player2X = 700;
                 player2Y = 200;
+                ballX = 393
+                ballY = 281
             })
 
             // What to do when a client message is received
