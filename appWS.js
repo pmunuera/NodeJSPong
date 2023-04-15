@@ -31,6 +31,7 @@ const playerHalf = playerHeight / 2;
 let playerSpeed = 1000;
 const playerSpeedIncrement = 15
 var playerDirection = "none";
+var playAgain = 0
 let result = {}
 class Obj {
 
@@ -167,7 +168,7 @@ class Obj {
                 this.broadcast(result)
                 await wait(3000)
             }
-            if(jugadors==2){
+            if(jugadors==2&&gameState=="syncing"||gameState=="playing"){
                 gameState="playing"
             switch (ballDirection) {
             case "upRight":
@@ -335,6 +336,16 @@ class Obj {
             }
             result = {status: "MovePlayer",type:"MovePlayer", player1Y:player1Y,player2Y:player2Y}
             this.broadcast(result)
+        }
+        else if(messageAsObject.type=="playAgain"){
+            var reconected=0
+            if(gameState=="gameOver"){
+                gameState="waiting"
+                reconected=1
+            }
+            else if(gameState=="waiting"&&reconected==0){
+                gameState="syncing"
+            }
         }
 
         function findIntersection(lineA, lineB) {
