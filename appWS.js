@@ -299,47 +299,7 @@ class Obj {
         }
         else if(messageAsObject.type=="playerDirection"){
             playerDirection=messageAsObject.direction;
-            if(gameState=="playing"){
-                switch (messageAsObject.player==1) {
-                    case "up":
-                        if(player1Y>5){
-                            player1Y = player1Y - playerSpeed / fps;
-                        }
-                        break;
-                    case "down":
-                        if(player1Y<595){
-                            player1Y = player1Y + playerSpeed / fps;
-                        }
-                        break;
-                }
-                switch (messageAsObject.player==2) {
-                    case "up":
-                        if(player2Y>5){
-                            player2Y = player2Y - playerSpeed / fps;
-                        }
-                        break;
-                    case "down":
-                        if(player2Y<595){
-                            player2Y = player2Y + playerSpeed / fps;
-                        }
-                        break;
-                }
-                const playerMinY = 5 + borderSize + playerHalf;
-                const playerMaxY = boardHeight - playerHalf - 5 - borderSize;
-
-                if (player1Y < playerMinY) {
-                    player1Y = playerMinY;
-                } else if (player1Y > playerMaxY) {
-                    player1Y = playerMaxY;
-                }
-
-                if (player2Y < playerMinY) {
-                    player2Y = playerMinY;
-                } else if (player2Y > playerMaxY) {
-                    player2Y = playerMaxY;
-                }
-            }
-            result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player,player1Y:player1Y,player2Y:player2Y}
+            result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="movePlayer"){
@@ -351,6 +311,9 @@ class Obj {
                     case "down":
                         player1Y = player1Y + playerSpeed / fps;
                         break;
+                    case "none":
+                        player1Y=player1Y
+                        break;
                 }
                 switch (messageAsObject.player2Direction) {
                     case "up":
@@ -358,6 +321,9 @@ class Obj {
                         break;
                     case "down":
                         player2Y = player2Y + playerSpeed / fps;
+                        break;
+                    case "none":
+                        player2Y=player2Y
                         break;
                 }
                 const playerMinY = 5 + borderSize + playerHalf;
