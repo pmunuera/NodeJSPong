@@ -299,8 +299,39 @@ class Obj {
         }
         else if(messageAsObject.type=="playerDirection"){
             playerDirection=messageAsObject.direction;
-            console.log(messageAsObject.player);
-            result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player}
+            if(gameState=="playing"){
+                switch (messageAsObject.player1Direction) {
+                    case "up":
+                        player1Y = player1Y - playerSpeed / fps;
+                        break;
+                    case "down":
+                        player1Y = player1Y + playerSpeed / fps;
+                        break;
+                }
+                switch (messageAsObject.player2Direction) {
+                    case "up":
+                        player2Y = player2Y - playerSpeed / fps;
+                        break;
+                    case "down":
+                        player2Y = player2Y + playerSpeed / fps;
+                        break;
+                }
+                const playerMinY = 5 + borderSize + playerHalf;
+                const playerMaxY = boardHeight - playerHalf - 5 - borderSize;
+
+                if (player1Y < playerMinY) {
+                    player1Y = playerMinY;
+                } else if (player1Y > playerMaxY) {
+                    player1Y = playerMaxY;
+                }
+
+                if (player2Y < playerMinY) {
+                    player2Y = playerMinY;
+                } else if (player2Y > playerMaxY) {
+                    player2Y = playerMaxY;
+                }
+            }
+            result = {status: "Direction", type:"Direction",playerDirection:playerDirection,player:messageAsObject.player,player1Y:player1Y,player2Y:player2Y}
             this.broadcast(result)
         }
         else if(messageAsObject.type=="movePlayer"){
