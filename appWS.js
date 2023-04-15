@@ -302,18 +302,26 @@ class Obj {
             if(gameState=="playing"){
                 switch (messageAsObject.player==1) {
                     case "up":
-                        player1Y = player1Y - playerSpeed / fps;
+                        if(player1Y>5){
+                            player1Y = player1Y - playerSpeed / fps;
+                        }
                         break;
                     case "down":
-                        player1Y = player1Y + playerSpeed / fps;
+                        if(player1Y<595){
+                            player1Y = player1Y + playerSpeed / fps;
+                        }
                         break;
                 }
                 switch (messageAsObject.player==2) {
                     case "up":
-                        player2Y = player2Y - playerSpeed / fps;
+                        if(player2Y>5){
+                            player2Y = player2Y - playerSpeed / fps;
+                        }
                         break;
                     case "down":
-                        player2Y = player2Y + playerSpeed / fps;
+                        if(player2Y<595){
+                            player2Y = player2Y + playerSpeed / fps;
+                        }
                         break;
                 }
                 const playerMinY = 5 + borderSize + playerHalf;
