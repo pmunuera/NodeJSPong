@@ -300,7 +300,7 @@ class Obj {
         else if(messageAsObject.type=="playerDirection"){
             playerDirection=messageAsObject.direction;
             if(gameState=="playing"){
-                switch (messageAsObject.player1Direction) {
+                switch (messageAsObject.player==1) {
                     case "up":
                         player1Y = player1Y - playerSpeed / fps;
                         break;
@@ -308,7 +308,7 @@ class Obj {
                         player1Y = player1Y + playerSpeed / fps;
                         break;
                 }
-                switch (messageAsObject.player2Direction) {
+                switch (messageAsObject.player==2) {
                     case "up":
                         player2Y = player2Y - playerSpeed / fps;
                         break;
