@@ -358,6 +358,13 @@ class Obj {
                 gameState="syncing"
             }
         }
+        else if(messageAsObject.type=="registrar"){
+            db.query("INSERT INTO Usuari(pseudonim,codi,color) VALUES('"+messageAsObject.pseudonim+"','"+messageAsObject.codi+
+            "','"+messageAsObject.color+"')");
+        }
+        else if(messageAsObject.type=="login"){
+
+        }
 
         function findIntersection(lineA, lineB) {
             let result = [0, 0];
