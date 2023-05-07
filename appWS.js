@@ -4,6 +4,8 @@ const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid');
 const { log } = require('forever');
 const wait = require('./utilsWait.js')
+const database    = require('./utilsMySQL.js')
+var db = new database()
 var player1;
 var player2;
 var gameState="waiting"
@@ -359,11 +361,31 @@ class Obj {
             }
         }
         else if(messageAsObject.type=="registrar"){
-            db.query("INSERT INTO Usuari(pseudonim,codi,color) VALUES('"+messageAsObject.pseudonim+"','"+messageAsObject.codi+
-            "','"+messageAsObject.color+"')");
+            try{
+                await this.db.query("INSERT INTO Usuari(pseudonim,codi,color) VALUES('"+messageAsObject.pseudonim+"','"+messageAsObject.codi+"','"+messageAsObject.color+"')");
+                var message = {status: "OK",type:"confirmationRegister",origin: id,destination:messageAsObject.id}
+            }
+            catch{
+                var message = {status: "ERROR",type:"Incorrect",origin: id,destination:messageAsObject.id}
+            }
+            console.log(message);
+            this.private(message)
         }
         else if(messageAsObject.type=="login"){
-
+            try{
+                await this.db.query("SELECT * FROM Usuari WHERE pseudonim='"+messageAsObject.pseudonim+"' AND codi='"+messageAsObject.codi+"';")
+                var message = {status: "OK",type:"confirmationLogin",origin: id,destination:messageAsObject.id}
+            }
+            catch{
+                var message = {status: "ERROR",type:"Incorrect",origin: id,destination:messageAsObject.id}
+            }
+            console.log(message);
+            this.private(message)
+        }
+        else if(messageAsObject.type=="loadUsers"){
+            var usuaris = await this.db.query("SELECT Pseudonim FROM Usuari;")
+            var message = {status: "OK",type:"userList",result: usuaris,origin: id,destination:messageAsObject.id}
+            this.private(message)
         }
 
         function findIntersection(lineA, lineB) {
