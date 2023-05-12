@@ -34,6 +34,12 @@ let playerSpeed = 1000;
 const playerSpeedIncrement = 15
 var playerDirection = "none";
 var playAgain = 0
+var idJugador0=0
+var idJugador1=0
+var color1="";
+var color2="";
+var username1="";
+var username2="";
 let result = {}
 class Obj {
 
@@ -49,6 +55,8 @@ class Obj {
 
         // What to do when a websocket client connects
         this.wss.on('connection', (ws) => { this.newConnection(ws) })
+        this.tocs0= 0
+        this.tocs1= 0
     }
 
     end () {
@@ -60,7 +68,6 @@ class Obj {
         if(jugadors<2){
             console.log("Client connected")
             // Add client to the clients list
-            jugadors=jugadors+1;
             const id = uuidv4()
             const color = Math.floor(Math.random() * 360)
             const metadata = { id, color,jugadors }
@@ -75,9 +82,6 @@ class Obj {
             if(numeroAleatorio==4) ballDirection = "downLeft";
             console.log(numeroAleatorio);
             console.log(ballDirection)
-            if(jugadors==2){
-                gameState="syncing"
-            }
             // What to do when a client is disconnected
             ws.on("close", () => { 
                 this.socketsClients.delete(ws)
@@ -227,9 +231,9 @@ class Obj {
                     points1+=1;
                     if (points1==5) {
                         gameState = "gameOver";
-
                     }
-            } else if (intersectionTop !== null) {
+            } 
+            else if (intersectionTop !== null) {
             switch (ballDirection) {
             case "upRight":
                 ballDirection = "downRight";
@@ -266,9 +270,11 @@ class Obj {
                 switch (ballDirection) {
                     case "downLeft":
                     ballDirection = "downRight";
+                    this.tocs0=this.tocs0+1
                     break;
                     case "upLeft": 
                     ballDirection = "upRight";
+                    this.tocs0=this.tocs0+1
                     break;
                 }
             ballX = intersectionPlayer1[0] + 1; // cambiar si el jugador es el de la izquierda a + 1
@@ -284,9 +290,11 @@ class Obj {
             switch (ballDirection) {
                 case "downRight":
                 ballDirection = "downLeft";
+                this.tocs1=this.tocs1+1
                 break;
                 case "upRight": 
                 ballDirection = "upLeft";
+                this.tocs1=this.tocs1+1
                 break;
             }
 
@@ -295,9 +303,10 @@ class Obj {
             ballSpeed = ballSpeed + ballSpeedIncrement;
             playerSpeed = playerSpeed + playerSpeedIncrement;
             }
-        }
             result = {status: "Ball",type:"Ball", ballDirection: ballDirection,ballX:ballNextX,ballY:ballNextY,playerY:messageAsObject.player1Y,pointsP1:points1,pointsP2:points2,gameStatus:gameState,jugadors:jugadors}
             this.broadcast(result)
+        }
+            
         }
         else if(messageAsObject.type=="playerDirection"){
             playerDirection=messageAsObject.direction;
@@ -355,6 +364,8 @@ class Obj {
             else if(gameState=="waiting"&&reconected==0){
                 points1=0
                 points2=0
+                this.tocs0= 0
+                this.tocs1= 0
                 player1Y=200
                 player2Y=200
                 gameState="syncing"
@@ -373,8 +384,14 @@ class Obj {
         }
         else if(messageAsObject.type=="login"){
             try{
-                await this.db.query("SELECT * FROM Usuari WHERE pseudonim='"+messageAsObject.pseudonim+"' AND codi='"+messageAsObject.codi+"';")
-                var message = {status: "OK",type:"confirmationLogin",origin: id,destination:messageAsObject.id}
+                var usuari=await this.db.query("SELECT * FROM Usuari WHERE pseudonim='"+messageAsObject.pseudonim+"' AND codi='"+messageAsObject.codi+"';")
+                console.log(usuari[0]);
+                if(usuari[0]!=null){
+                    var message = {status: "OK",type:"confirmationLogin",origin: id,destination:messageAsObject.id,idUsuari:usuari[0].id}
+                }
+                else{
+                    var message = {status: "ERROR",type:"confirmationLogin",origin: id,destination:messageAsObject.id}
+                }
             }
             catch{
                 var message = {status: "ERROR",type:"Incorrect",origin: id,destination:messageAsObject.id}
@@ -383,9 +400,133 @@ class Obj {
             this.private(message)
         }
         else if(messageAsObject.type=="loadUsers"){
-            var usuaris = await this.db.query("SELECT Pseudonim FROM Usuari;")
+            var usuaris = await this.db.query("SELECT id,Pseudonim FROM Usuari;")
             var message = {status: "OK",type:"userList",result: usuaris,origin: id,destination:messageAsObject.id}
             this.private(message)
+        }
+        else if(messageAsObject.type=="getStats"){
+            var comprobar = await this.db.query("SELECT count(*) AS Partides FROM Partida WHERE idJugador0="+messageAsObject.playerId+" OR idJugador1="+messageAsObject.playerId+";")
+            if(comprobar[0].Partides>0){
+                var guanyades = await this.db.query("SELECT count(*) AS Guanyades FROM Partida WHERE guanyador="+messageAsObject.playerId+";")
+                var perdudes = await this.db.query("SELECT count(*) AS Perdudes FROM Partida WHERE (idJugador0="+messageAsObject.playerId+" OR idJugador1="+messageAsObject.playerId+") AND guanyador !="+messageAsObject.playerId+";")
+                var temps0 = await this.db.query("SELECT max(duracio) AS Temps FROM Partida WHERE idJugador0="+messageAsObject.playerId+";")
+                var temps1 = await this.db.query("SELECT max(duracio) AS Temps FROM Partida WHERE idJugador1="+messageAsObject.playerId+";")
+                var maxTemps;
+                var tocsJ0 = await this.db.query("SELECT max(tocsJugador0) AS tocsJugador0 FROM Partida WHERE idJugador0="+messageAsObject.playerId+";")
+                var tocsJ1 = await this.db.query("SELECT max(tocsJugador1) AS tocsJugador1 FROM Partida WHERE idJugador1="+messageAsObject.playerId+";")
+                var maxTocs = 0
+                let segundosTotales0=0
+                let segundosTotales1=0
+                if(temps0[0].Temps!=null){
+                    let [horas0, minutos0, segundos0] = temps0[0].Temps.split(":");
+                    segundosTotales0 = parseInt(horas0) * 3600 + parseInt(minutos0) * 60 + parseInt(segundos0);
+                }
+                if(temps1[0].Temps!=null){
+                    let [horas1, minutos1, segundos1] = temps1[0].Temps.split(":");
+                    segundosTotales1 = parseInt(horas1) * 3600 + parseInt(minutos1) * 60 + parseInt(segundos1);
+                }
+                var partidaTocs;
+                if(tocsJ0[0].tocsJugador0>tocsJ1[0].tocsJugador1){
+                    maxTocs=tocsJ0[0].tocsJugador0
+                    partidaTocs=await this.db.query("SELECT * FROM Partida WHERE idJugador0="+messageAsObject.playerId+" AND tocsJugador0="+maxTocs+";")
+                }
+                else{
+                    maxTocs=tocsJ1[0].tocsJugador1
+                    partidaTocs=await this.db.query("SELECT * FROM Partida WHERE idJugador1="+messageAsObject.playerId+" AND tocsJugador1="+maxTocs+";")
+                }
+                var partidaLlarga;
+                if(segundosTotales0>segundosTotales1){
+                    maxTemps=temps0[0].Temps
+                    partidaLlarga = await this.db.query("SELECT * FROM Partida WHERE idJugador0="+messageAsObject.playerId+" AND duracio='"+maxTemps+"';")
+                }
+                else{
+                    maxTemps=temps1[0].Temps 
+                    partidaLlarga = await this.db.query("SELECT * FROM Partida WHERE idJugador1="+messageAsObject.playerId+" AND duracio='"+maxTemps+"';")
+                }
+                var jugadorsPartidaTocs = await this.db.query("SELECT * FROM Partida WHERE id="+partidaTocs[0].id+";")
+                var timeTocs = await this.db.query("SELECT date_format(time,'%Y-%m-%d %H:%i:%s') as time FROM Partida WHERE id="+partidaTocs[0].id+";")
+                console.log(timeTocs);
+                var jugador0Tocs = await this.db.query("SELECT * FROM Usuari WHERE id="+jugadorsPartidaTocs[0].idJugador0+";")
+                var jugador1Tocs = await this.db.query("SELECT * FROM Usuari WHERE id="+jugadorsPartidaTocs[0].idJugador1+";")
+                var jugadorsPartidaLlarga = await this.db.query("SELECT * FROM Partida WHERE id="+partidaLlarga[0].id+";")
+                var timeLlarga = await this.db.query("SELECT date_format(time,'%Y-%m-%d %H:%i:%s') as time FROM Partida WHERE id="+partidaLlarga[0].id+";")
+                var jugador0Llarga = await this.db.query("SELECT * FROM Usuari WHERE id="+jugadorsPartidaLlarga[0].idJugador0+";")
+                var jugador1Llarga = await this.db.query("SELECT * FROM Usuari WHERE id="+jugadorsPartidaLlarga[0].idJugador1+";")
+                var textPartidaTocs = jugador0Tocs[0].pseudonim+" "+partidaTocs[0].tocsJugador0+" vs "+jugador1Tocs[0].pseudonim+" "+partidaTocs[0].tocsJugador1+" - "+timeTocs[0].time
+                var textPartidaLlarga = jugador0Llarga[0].pseudonim+" "+partidaLlarga[0].tocsJugador0+" vs "+jugador1Llarga[0].pseudonim+" "+partidaLlarga[0].tocsJugador1+" - "+timeLlarga[0].time
+                var message = {status: "OK",type:"stats",nom:messageAsObject.nom,partidaTocs:textPartidaTocs,partidaLlarga:textPartidaLlarga,guanyades:guanyades[0].Guanyades,perdudes:perdudes[0].Perdudes,maxTocs:maxTocs,temps:maxTemps,origin: id,destination:messageAsObject.id}
+            }
+            else{
+                var message = {status: "ERROR",type:"stats",origin: id,destination:messageAsObject.id}
+            }
+            this.private(message)
+        }
+        else if(messageAsObject.type=="getColor"){
+            jugadors+=1
+            console.log("Jugadors "+jugadors);
+            if(jugadors==1){
+                var jugador1 = await this.db.query("SELECT color,pseudonim FROM Usuari WHERE id="+messageAsObject.playerId+";")
+                color1=jugador1[0].color
+                username1=jugador1[0].pseudonim
+                idJugador0=messageAsObject.playerId;
+                var message = {status: "OK",type:"playingAs",origin: id,destination:messageAsObject.id}
+                console.log(message);
+                this.private(message)
+            }
+            if(jugadors==2){
+                var jugador2 = await this.db.query("SELECT color,pseudonim FROM Usuari WHERE id="+messageAsObject.playerId+";")
+                color2=jugador2[0].color
+                username2=jugador2[0].pseudonim
+                idJugador1=messageAsObject.playerId;
+                var message = {status: "OK",type:"color",color1:color1,username1:username1,color2:color2,username2:username2}
+                this.broadcast(message)
+                gameState="syncing"
+                console.log(gameState);
+            }
+        }
+        /*else if(messageAsObject.type=="play"){
+            jugadors+=1
+            if(jugadors==2){
+
+            }
+        }*/
+        else if(messageAsObject.type="saveMatch"){
+            const agregarCeroSiEsNecesario = valor => {
+                if (valor < 10) {
+                    return "0" + valor;
+                } else {
+                    return "" + valor;
+                }
+            }
+            const milisegundosAMinutosYSegundos = (milisegundos) => {
+                var horas = parseInt(milisegundos/ 1000 / 60 / 60)
+                milisegundos -= horas*60*60*1000
+                var minutos = parseInt(milisegundos / 1000 / 60);
+                milisegundos -= minutos * 60 * 1000;
+                var segundos = (milisegundos / 1000);
+                if(segundos==60){
+                    minutos=minutos+1
+                }
+                if(minutos==60){
+                    horas=horas+1
+                }
+                return `${agregarCeroSiEsNecesario(horas)}:${agregarCeroSiEsNecesario(minutos)}:${agregarCeroSiEsNecesario(segundos.toFixed(0))}`;
+            };
+            var temps = milisegundosAMinutosYSegundos(messageAsObject.time)
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; 
+            var yyyy = today.getFullYear();
+            if(dd<10) {
+                dd='0'+dd;
+            } 
+                
+            if(mm<10) {
+                mm='0'+mm;
+            } 
+            var horesMinuts=today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()
+            today = mm+'/'+dd+'/'+yyyy+" "+horesMinuts;
+            await this.db.query("INSERT INTO Partida (time,duracio,idJugador0,idJugador1,tocsJugador0,tocsJugador1,guanyador) VALUES(STR_TO_DATE('"+today+"','%m/%d/%Y %H:%i:%s'),'"+temps+"',"+idJugador0+","+idJugador1+","+this.tocs0+","+this.tocs1+","+messageAsObject.id+")")
         }
 
         function findIntersection(lineA, lineB) {
